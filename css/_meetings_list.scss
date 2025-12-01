@@ -129,7 +129,7 @@
 
         &.with-click-handler:hover,
         &.with-click-handler:focus {
-            background-color: #c7ddff;
+            background-color: #f5e4e4;
         }
 
         .add-button {
@@ -157,7 +157,7 @@
         position: absolute;
 
         &>svg {
-            fill: #0074e0;
+            fill: #6C4041;
         }
     }
 
@@ -170,7 +170,7 @@
 
         .delete-meeting:hover {
             &>svg {
-                fill: #4687ED;
+                fill: #aa7777;
             }
         }
     }
