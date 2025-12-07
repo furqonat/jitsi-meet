@@ -16,13 +16,6 @@ import { AbstractWelcomePage, IProps, _mapStateToProps } from "./AbstractWelcome
 import Tabs from "./Tabs";
 
 /**
- * The pattern used to validate room name.
- *
- * @type {string}
- */
-export const ROOM_NAME_VALIDATE_PATTERN_STR = "^[^?&:\u0022\u0027%#]+$";
-
-/**
  * The Web container rendering the welcome page.
  *
  * @augments AbstractWelcomePage
@@ -31,7 +24,7 @@ class WelcomePage extends AbstractWelcomePage<IProps> {
     _additionalContentRef: HTMLDivElement | null;
     _additionalToolbarContentRef: HTMLDivElement | null;
     _additionalCardRef: HTMLDivElement | null;
-    _roomInputRef: HTMLInputElement | null;
+    _roomSelectRef: HTMLSelectElement | null;
     _additionalCardTemplate: HTMLTemplateElement | null;
     _additionalContentTemplate: HTMLTemplateElement | null;
     _additionalToolbarContentTemplate: HTMLTemplateElement | null;
@@ -57,8 +50,8 @@ class WelcomePage extends AbstractWelcomePage<IProps> {
 
         this.state = {
             ...this.state,
-
-            generateRoomNames: interfaceConfig.GENERATE_ROOMNAMES_ON_WELCOME_PAGE,
+            room: "Security1", // Set default value to Security1
+            generateRoomNames: false, // Disable auto-generate since we're using select
         };
 
         /**
@@ -78,7 +71,7 @@ class WelcomePage extends AbstractWelcomePage<IProps> {
          */
         this._additionalContentRef = null;
 
-        this._roomInputRef = null;
+        this._roomSelectRef = null;
 
         /**
          * The HTML Element used as the container for additional toolbar content. Used
@@ -128,7 +121,7 @@ class WelcomePage extends AbstractWelcomePage<IProps> {
         this._onRoomChange = this._onRoomChange.bind(this);
         this._setAdditionalCardRef = this._setAdditionalCardRef.bind(this);
         this._setAdditionalContentRef = this._setAdditionalContentRef.bind(this);
-        this._setRoomInputRef = this._setRoomInputRef.bind(this);
+        this._setRoomSelectRef = this._setRoomSelectRef.bind(this);
         this._setAdditionalToolbarContentRef = this._setAdditionalToolbarContentRef.bind(this);
         this._renderFooter = this._renderFooter.bind(this);
     }
@@ -145,10 +138,6 @@ class WelcomePage extends AbstractWelcomePage<IProps> {
 
         document.body.classList.add("welcome-page");
         document.title = interfaceConfig.APP_NAME;
-
-        if (this.state.generateRoomNames) {
-            this._updateRoomName();
-        }
 
         if (this._shouldShowAdditionalContent()) {
             this._additionalContentRef?.appendChild(this._additionalContentTemplate?.content.cloneNode(true) as Node);
@@ -192,6 +181,9 @@ class WelcomePage extends AbstractWelcomePage<IProps> {
         const contentClassName = showAdditionalContent ? "with-content" : "without-content";
         const footerClassName = DISPLAY_WELCOME_FOOTER ? "with-footer" : "without-footer";
 
+        // Generate Security options from 1 to 10
+        const securityOptions = Array.from({ length: 10 }, (_, i) => `Security${i + 1}`);
+
         return (
             <div className={`welcome ${contentClassName} ${footerClassName}`} id="welcome_page">
                 <div className="header">
@@ -209,24 +201,38 @@ class WelcomePage extends AbstractWelcomePage<IProps> {
                             ) : null}
                         </div>
                         <h1 className="header-text-title">Hankamrata Meet</h1>
-                        <span className="header-text-subtitle">{t("welcomepage.headerSubtitle")}</span>
+                        <span className="header-text-subtitle">Pilih ruangan untuk bergabung</span>
                         <div id="enter_room">
                             <div className="join-meeting-container">
                                 <div className="enter-room-input-container">
                                     <form onSubmit={this._onFormSubmit}>
-                                        <input
+                                        <select
                                             aria-disabled="false"
-                                            aria-label="Meeting name input"
+                                            aria-label="Meeting security level"
                                             autoFocus={true}
-                                            className="enter-room-input"
+                                            className="enter-room-select"
                                             id="enter_room_field"
                                             onChange={this._onRoomChange}
-                                            pattern={ROOM_NAME_VALIDATE_PATTERN_STR}
-                                            placeholder={this.state.roomPlaceholder}
-                                            ref={this._setRoomInputRef}
-                                            type="text"
+                                            ref={this._setRoomSelectRef}
                                             value={this.state.room}
-                                        />
+                                            style={{
+                                                padding: "10px",
+                                                fontSize: "16px",
+                                                border: "none",
+                                                borderRadius: "4px",
+                                                backgroundColor: "#fff",
+                                                color: "#333",
+                                                width: "100%",
+                                                height: "50px", // Sesuaikan dengan tinggi tombol jika perlu
+                                                boxSizing: "border-box",
+                                            }}
+                                        >
+                                            {securityOptions.map((security) => (
+                                                <option key={security} value={security.toLocaleLowerCase()}>
+                                                    {security}
+                                                </option>
+                                            ))}
+                                        </select>
                                     </form>
                                 </div>
 
@@ -239,18 +245,12 @@ class WelcomePage extends AbstractWelcomePage<IProps> {
                                     tabIndex={0}
                                     type="button"
                                 >
-                                    {t("welcomepage.startMeeting")}
+                                    Masuk Ruangan
                                 </button>
                             </div>
                         </div>
-                        {this._titleHasNotAllowCharacter && (
-                            <div className="not-allow-title-character-div" role="alert">
-                                <Icon src={IconWarning} />
-                                <span className="not-allow-title-character-text">
-                                    {t("welcomepage.roomNameAllowedChars")}
-                                </span>
-                            </div>
-                        )}
+
+                        {/* Remove character validation warning since we're using select */}
                         {this._renderInsecureRoomNameWarning()}
 
                         {_moderatedRoomServiceUrl && (
@@ -302,7 +302,7 @@ class WelcomePage extends AbstractWelcomePage<IProps> {
     _onFormSubmit(event: React.FormEvent) {
         event.preventDefault();
 
-        if (!this._roomInputRef || this._roomInputRef.reportValidity()) {
+        if (!this._roomSelectRef || this._roomSelectRef.reportValidity()) {
             this._onJoin();
         }
     }
@@ -319,10 +319,8 @@ class WelcomePage extends AbstractWelcomePage<IProps> {
      */
     // @ts-ignore
     // eslint-disable-next-line require-jsdoc
-    _onRoomChange(event: React.ChangeEvent<HTMLInputElement>) {
-        const specialCharacters = ["?", "&", ":", "'", '"', "%", "#", "."];
-
-        this._titleHasNotAllowCharacter = specialCharacters.some((char) => event.target.value.includes(char));
+    _onRoomChange(event: React.ChangeEvent<HTMLSelectElement>) {
+        // No need for character validation when using select
         super._onRoomChange(event.target.value);
     }
 
@@ -465,15 +463,15 @@ class WelcomePage extends AbstractWelcomePage<IProps> {
     }
 
     /**
-     * Sets the internal reference to the HTMLInputElement used to hold the
-     * welcome page input room element.
+     * Sets the internal reference to the HTMLSelectElement used to hold the
+     * welcome page select room element.
      *
-     * @param {HTMLInputElement} el - The HTMLElement for the input of the room name on the welcome page.
+     * @param {HTMLSelectElement} el - The HTMLElement for the select of the room security on the welcome page.
      * @private
      * @returns {void}
      */
-    _setRoomInputRef(el: HTMLInputElement) {
-        this._roomInputRef = el;
+    _setRoomSelectRef(el: HTMLSelectElement) {
+        this._roomSelectRef = el;
     }
 
     /**
