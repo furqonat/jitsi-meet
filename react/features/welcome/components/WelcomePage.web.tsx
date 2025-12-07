@@ -50,8 +50,8 @@ class WelcomePage extends AbstractWelcomePage<IProps> {
 
         this.state = {
             ...this.state,
-            room: "Security1", // Set default value to Security1
-            generateRoomNames: false, // Disable auto-generate since we're using select
+            room: "security1", // Set default value to Security1
+            generateRoomNames: undefined, // Disable auto-generate since we're using select
         };
 
         /**
