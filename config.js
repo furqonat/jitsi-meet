@@ -42,7 +42,7 @@ var config = {
         // XMPP MUC domain. FIXME: use XEP-0030 to discover it.
         muc: 'conference.' + subdomain + 'conference.meet.hankamrata.id',
     },
-
+    iceConnectionTimeout: 30000,
     // BOSH URL. FIXME: use XEP-0156 to discover it.
     bosh: 'https://conference.meet.hankamrata.id/' + subdir + 'http-bind',
 
@@ -62,7 +62,15 @@ var config = {
     // Option to send conference requests to jicofo over http (requires nginx rule for it)
     // conferenceRequestUrl:
     //   'https://<!--# echo var="http_host" default="jitsi-meet.example.com" -->/' + subdir + 'conference-request/v1',
-
+    enableIceRestart: true,
+    useTurnUdp: true,
+    
+    // Disable P2P untuk > 2 participants
+    p2p: {
+        enabled: false,
+        preferH264: true,
+        disableH264: false
+    },
     // Options related to the bridge (colibri) data channel
     bridgeChannel: {
         // If the backend advertises multiple colibri websockets, this options allows
@@ -162,8 +170,9 @@ var config = {
 
     // Disables ICE/UDP by filtering out local and remote UDP candidates in
     // signalling.
-    // webrtcIceUdpDisable: false,
-
+    webrtcIceUdpDisable: false,
+    useTurnUdp: true,
+    useTurnTcp: true,
     // Disables ICE/TCP by filtering out local and remote TCP candidates in
     // signalling.
     // webrtcIceTcpDisable: false,
@@ -1919,3 +1928,4 @@ if (enableJaaS) {
     config.dialInConfCodeUrl = 'https://conference-mapper.jitsi.net/v1/access';
     config.roomPasswordNumberOfDigits = 10; // skip re-adding it (do not remove comment)
 }
+
