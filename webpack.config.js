@@ -46,11 +46,11 @@ function getBundleAnalyzerPlugin(analyzeBundle, name) {
         return [];
     }
 
-    return [new BundleAnalyzerPlugin({
+    return [ new BundleAnalyzerPlugin({
         analyzerMode: 'disabled',
         generateStatsFile: true,
         statsFilename: `${name}-stats.json`
-    })];
+    }) ];
 }
 
 /**
@@ -107,7 +107,7 @@ function getConfig(options = {}) {
         devtool: isProduction ? 'source-map' : 'eval-source-map',
         mode: isProduction ? 'production' : 'development',
         module: {
-            rules: [{
+            rules: [ {
                 // Transpile ES2015 (aka ES6) to ES5. Accept the JSX syntax by React
                 // as well.
 
@@ -161,13 +161,13 @@ function getConfig(options = {}) {
                 ]
             }, {
                 test: /\.svg$/,
-                use: [{
+                use: [ {
                     loader: '@svgr/webpack',
                     options: {
                         dimensions: false,
                         expandProps: 'start'
                     }
-                }]
+                } ]
             }, {
                 test: /\.tsx?$/,
                 exclude: /node_modules/,
@@ -176,7 +176,7 @@ function getConfig(options = {}) {
                     configFile: 'tsconfig.web.json',
                     transpileOnly: !isProduction // Skip type checking for dev builds.,
                 }
-            }]
+            } ]
         },
         node: {
             // Allow the use of the real filename of the module being executed. By
@@ -254,7 +254,7 @@ function getDevServerConfig() {
         hot: true,
         proxy: [
             {
-                context: ['/'],
+                context: [ '/' ],
                 bypass: devServerProxyBypass,
                 secure: false,
                 target: devServerProxyTarget,

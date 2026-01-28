@@ -8,15 +8,12 @@ import { translate } from '../../../../base/i18n/functions';
 import Button from '../../../../base/ui/components/native/Button';
 import Input from '../../../../base/ui/components/native/Input';
 import { BUTTON_TYPES } from '../../../../base/ui/constants.native';
-import AbstractStreamKeyForm, {
-    IProps as AbstractProps
-} from '../AbstractStreamKeyForm';
+import AbstractStreamKeyForm, { IProps as AbstractProps } from '../AbstractStreamKeyForm';
 import { getLiveStreaming } from '../functions';
 
 import styles from './styles';
 
 interface IProps extends AbstractProps {
-
     /**
      * Style of the dialogs feature.
      */
@@ -42,7 +39,6 @@ class StreamKeyForm extends AbstractStreamKeyForm<IProps> {
         this._onOpenGooglePrivacyPolicy = this._onOpenGooglePrivacyPolicy.bind(this);
         this._onOpenHelp = this._onOpenHelp.bind(this);
         this._onOpenYoutubeTerms = this._onOpenYoutubeTerms.bind(this);
-
     }
 
     /**
@@ -60,41 +56,18 @@ class StreamKeyForm extends AbstractStreamKeyForm<IProps> {
                     <Input
                         customStyles = {{
                             input: styles.streamKeyInput,
-                            container: styles.streamKeyContainer }}
+                            container: styles.streamKeyContainer,
+                        }}
                         onChange = { this._onInputChange }
                         placeholder = { t('liveStreaming.enterStreamKey') }
                         value = { this.props.value } />
                     <View style = { styles.formValidationItem as ViewStyle }>
-                        {
-                            this.state.showValidationError && <Text
-                                style = { [
-                                    _dialogStyles.text,
-                                    styles.warningText
-                                ] }>
-                                { t('liveStreaming.invalidStreamKey') }
+                        {this.state.showValidationError && (
+                            <Text style = { [ _dialogStyles.text, styles.warningText ] }>
+                                {t('liveStreaming.invalidStreamKey')}
                             </Text>
-                        }
+                        )}
                     </View>
-                </View>
-                <View style = { styles.formButtonsWrapper as ViewStyle }>
-                    <Button
-                        accessibilityLabel = 'liveStreaming.streamIdHelp'
-                        labelKey = 'liveStreaming.streamIdHelp'
-                        labelStyle = { styles.buttonLabelStyle }
-                        onClick = { this._onOpenHelp }
-                        type = { BUTTON_TYPES.TERTIARY } />
-                    <Button
-                        accessibilityLabel = 'liveStreaming.youtubeTerms'
-                        labelKey = 'liveStreaming.youtubeTerms'
-                        labelStyle = { styles.buttonLabelStyle }
-                        onClick = { this._onOpenYoutubeTerms }
-                        type = { BUTTON_TYPES.TERTIARY } />
-                    <Button
-                        accessibilityLabel = 'liveStreaming.googlePrivacyPolicy'
-                        labelKey = 'liveStreaming.googlePrivacyPolicy'
-                        labelStyle = { styles.buttonLabelStyle }
-                        onClick = { this._onOpenGooglePrivacyPolicy }
-                        type = { BUTTON_TYPES.TERTIARY } />
                 </View>
             </>
         );
@@ -157,7 +130,7 @@ class StreamKeyForm extends AbstractStreamKeyForm<IProps> {
 function _mapStateToProps(state: IReduxState) {
     return {
         ..._abstractMapStateToProps(state),
-        _liveStreaming: getLiveStreaming(state)
+        _liveStreaming: getLiveStreaming(state),
     };
 }
 

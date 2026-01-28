@@ -103,8 +103,8 @@
             "selectSoundDevice": "Select sound device"
         },
         "labels": {
-            "buttonLabel": "Car mode",
-            "title": "Car mode",
+            "buttonLabel": "Do not disturb",
+            "title": "Do not disturb",
             "videoStopped": "Your video is stopped"
         }
     },
@@ -1256,7 +1256,7 @@
         "sdkVersion": "SDK version",
         "serverURL": "Server URL",
         "showAdvanced": "Show advanced settings",
-        "startCarModeInLowBandwidthMode": "Start car mode in low bandwidth mode",
+        "startCarModeInLowBandwidthMode": "Start do not disturb in low bandwidth mode",
         "startWithAudioMuted": "Start with audio muted",
         "startWithVideoMuted": "Start with video muted",
         "terms": "Terms",
@@ -1310,7 +1310,7 @@
             "boo": "Boo",
             "breakoutRooms": "Breakout rooms",
             "callQuality": "Manage video quality",
-            "carmode": "Car Mode",
+            "carmode": "Do not disturb",
             "cc": "Toggle subtitles",
             "chat": "Open / Close chat",
             "clap": "Clap",

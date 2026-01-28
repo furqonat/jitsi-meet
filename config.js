@@ -43,6 +43,7 @@ var config = {
         muc: 'conference.' + subdomain + 'conference.meet.hankamrata.id',
     },
     iceConnectionTimeout: 30000,
+
     // BOSH URL. FIXME: use XEP-0156 to discover it.
     bosh: 'https://conference.meet.hankamrata.id/' + subdir + 'http-bind',
 
@@ -64,13 +65,14 @@ var config = {
     //   'https://<!--# echo var="http_host" default="jitsi-meet.example.com" -->/' + subdir + 'conference-request/v1',
     enableIceRestart: true,
     useTurnUdp: true,
-    
+
     // Disable P2P untuk > 2 participants
     p2p: {
         enabled: false,
         preferH264: true,
         disableH264: false
     },
+
     // Options related to the bridge (colibri) data channel
     bridgeChannel: {
         // If the backend advertises multiple colibri websockets, this options allows
@@ -173,6 +175,7 @@ var config = {
     webrtcIceUdpDisable: false,
     useTurnUdp: true,
     useTurnTcp: true,
+
     // Disables ICE/TCP by filtering out local and remote TCP candidates in
     // signalling.
     // webrtcIceTcpDisable: false,

@@ -6,9 +6,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
-import BreakoutRooms
-// @ts-ignore
-    from '../../../../../breakout-rooms/components/native/BreakoutRooms';
+import BreakoutRooms from // @ts-ignore
+    '../../../../../breakout-rooms/components/native/BreakoutRooms';
 // @ts-ignore
 import Chat from '../../../../../chat/components/native/Chat';
 // @ts-ignore
@@ -21,28 +20,22 @@ import { arePollsDisabled } from '../../../../../conference/functions';
 import SharedDocument from '../../../../../etherpad/components/native/SharedDocument';
 // @ts-ignore
 import GifsMenu from '../../../../../gifs/components/native/GifsMenu';
-import AddPeopleDialog
-// @ts-ignore
-    from '../../../../../invite/components/add-people-dialog/native/AddPeopleDialog';
+import AddPeopleDialog from // @ts-ignore
+    '../../../../../invite/components/add-people-dialog/native/AddPeopleDialog';
 // @ts-ignore
 import ParticipantsPane from '../../../../../participants-pane/components/native/ParticipantsPane';
 // @ts-ignore
 import StartLiveStreamDialog from '../../../../../recording/components/LiveStream/native/StartLiveStreamDialog';
-import StartRecordingDialog
-// @ts-ignore
-    from '../../../../../recording/components/Recording/native/StartRecordingDialog';
-import SalesforceLinkDialog
-// @ts-ignore
-    from '../../../../../salesforce/components/native/SalesforceLinkDialog';
-import SecurityDialog
-// @ts-ignore
-    from '../../../../../security/components/security-dialog/native/SecurityDialog';
-import SpeakerStats
-// @ts-ignore
-    from '../../../../../speaker-stats/components/native/SpeakerStats';
-import LanguageSelectorDialog
-// @ts-ignore
-    from '../../../../../subtitles/components/native/LanguageSelectorDialog';
+import StartRecordingDialog from // @ts-ignore
+    '../../../../../recording/components/Recording/native/StartRecordingDialog';
+import SalesforceLinkDialog from // @ts-ignore
+    '../../../../../salesforce/components/native/SalesforceLinkDialog';
+import SecurityDialog from // @ts-ignore
+    '../../../../../security/components/security-dialog/native/SecurityDialog';
+import SpeakerStats from // @ts-ignore
+    '../../../../../speaker-stats/components/native/SpeakerStats';
+import LanguageSelectorDialog from // @ts-ignore
+    '../../../../../subtitles/components/native/LanguageSelectorDialog';
 import Whiteboard from '../../../../../whiteboard/components/native/Whiteboard';
 // @ts-ignore
 import { screen } from '../../../routes';
@@ -64,7 +57,7 @@ import {
     sharedDocumentScreenOptions,
     speakerStatsScreenOptions,
     subtitlesScreenOptions,
-    whiteboardScreenOptions
+    whiteboardScreenOptions,
     // @ts-ignore
 } from '../../../screenOptions';
 // @ts-ignore
@@ -74,13 +67,11 @@ import LobbyNavigationContainer from '../../lobby/components/LobbyNavigationCont
 // @ts-ignore
 import SettingsNavigationContainer from '../../settings/components/SettingsNavigationContainer';
 import {
-    conferenceNavigationRef
+    conferenceNavigationRef,
     // @ts-ignore
 } from '../ConferenceNavigationContainerRef';
 
-
 const ConferenceStack = createStackNavigator();
-
 
 const ConferenceNavigationContainer = () => {
     const isPollsDisabled = useSelector(arePollsDisabled);
@@ -106,7 +97,7 @@ const ConferenceNavigationContainer = () => {
             theme = { navigationContainerTheme as Theme }>
             <ConferenceStack.Navigator
                 screenOptions = {{
-                    presentation: 'modal'
+                    presentation: 'modal',
                 }}>
                 <ConferenceStack.Screen
                     component = { Conference }
@@ -117,77 +108,77 @@ const ConferenceNavigationContainer = () => {
                     name = { chatScreenName }
                     options = {{
                         ...chatScreenOptions,
-                        title: t(chatTitleString)
+                        title: t(chatTitleString),
                     }} />
                 <ConferenceStack.Screen
                     component = { ParticipantsPane }
                     name = { screen.conference.participants }
                     options = {{
                         ...participantsScreenOptions,
-                        title: t('participantsPane.title')
+                        title: t('participantsPane.title'),
                     }} />
                 <ConferenceStack.Screen
                     component = { SecurityDialog }
                     name = { screen.conference.security }
                     options = {{
                         ...securityScreenOptions,
-                        title: t('security.title')
+                        title: t('security.title'),
                     }} />
                 <ConferenceStack.Screen
                     component = { StartRecordingDialog }
                     name = { screen.conference.recording }
                     options = {{
                         ...recordingScreenOptions,
-                        title: t('recording.title')
+                        title: t('recording.title'),
                     }} />
                 <ConferenceStack.Screen
                     component = { StartLiveStreamDialog }
                     name = { screen.conference.liveStream }
                     options = {{
                         ...liveStreamScreenOptions,
-                        title: t('liveStreaming.title')
+                        title: t('liveStreaming.title'),
                     }} />
                 <ConferenceStack.Screen
                     component = { SpeakerStats }
                     name = { screen.conference.speakerStats }
                     options = {{
                         ...speakerStatsScreenOptions,
-                        title: t('speakerStats.speakerStats')
+                        title: t('speakerStats.speakerStats'),
                     }} />
                 <ConferenceStack.Screen
                     component = { SalesforceLinkDialog }
                     name = { screen.conference.salesforce }
                     options = {{
                         ...salesforceScreenOptions,
-                        title: t('notify.linkToSalesforce')
+                        title: t('notify.linkToSalesforce'),
                     }} />
                 <ConferenceStack.Screen
                     component = { GifsMenu }
                     name = { screen.conference.gifsMenu }
                     options = {{
                         ...gifsMenuOptions,
-                        title: t('notify.gifsMenu')
+                        title: t('notify.gifsMenu'),
                     }} />
                 <ConferenceStack.Screen
                     component = { LobbyNavigationContainer }
                     name = { screen.lobby.root }
                     options = {{
                         ...lobbyNavigationContainerScreenOptions,
-                        title: t('lobby.title')
+                        title: t('lobby.title'),
                     }} />
                 <ConferenceStack.Screen
                     component = { AddPeopleDialog }
                     name = { screen.conference.invite }
                     options = {{
                         ...inviteScreenOptions,
-                        title: t('addPeople.add')
+                        title: t('addPeople.add'),
                     }} />
                 <ConferenceStack.Screen
                     component = { SharedDocument }
                     name = { screen.conference.sharedDocument }
                     options = {{
                         ...sharedDocumentScreenOptions,
-                        title: t('documentSharing.title')
+                        title: t('documentSharing.title'),
                     }} />
                 <ConferenceStack.Screen
                     // @ts-ignore
@@ -200,21 +191,21 @@ const ConferenceNavigationContainer = () => {
                     name = { screen.conference.carmode }
                     options = {{
                         ...carmodeScreenOptions,
-                        title: t('carmode.labels.title')
+                        title: 'Do Not Disturb',
                     }} />
                 <ConferenceStack.Screen
                     component = { LanguageSelectorDialog }
                     name = { screen.conference.subtitles }
                     options = {{
                         ...subtitlesScreenOptions,
-                        title: t('transcribing.subtitles')
+                        title: t('transcribing.subtitles'),
                     }} />
                 <ConferenceStack.Screen
                     component = { BreakoutRooms }
                     name = { screen.conference.breakoutRooms }
                     options = {{
                         ...breakoutRoomsScreenOptions,
-                        title: t('breakoutRooms.title')
+                        title: t('breakoutRooms.title'),
                     }} />
                 <ConferenceStack.Screen
                     // @ts-ignore
@@ -222,7 +213,7 @@ const ConferenceNavigationContainer = () => {
                     name = { screen.conference.whiteboard }
                     options = {{
                         ...whiteboardScreenOptions,
-                        title: t('whiteboard.screenTitle')
+                        title: t('whiteboard.screenTitle'),
                     }} />
             </ConferenceStack.Navigator>
         </NavigationContainer>

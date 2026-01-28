@@ -1,15 +1,15 @@
-import { merge, union } from "lodash-es";
+import { merge, union } from 'lodash-es';
 
-import { CONFERENCE_INFO } from "../../conference/components/constants";
-import { TOOLBAR_BUTTONS } from "../../toolbox/constants";
-import { ToolbarButton } from "../../toolbox/types";
-import { CONNECTION_PROPERTIES_UPDATED } from "../connection/actionTypes";
-import ReducerRegistry from "../redux/ReducerRegistry";
-import { equals } from "../redux/functions";
+import { CONFERENCE_INFO } from '../../conference/components/constants';
+import { TOOLBAR_BUTTONS } from '../../toolbox/constants';
+import { ToolbarButton } from '../../toolbox/types';
+import { CONNECTION_PROPERTIES_UPDATED } from '../connection/actionTypes';
+import ReducerRegistry from '../redux/ReducerRegistry';
+import { equals } from '../redux/functions';
 
-import { CONFIG_WILL_LOAD, LOAD_CONFIG_ERROR, OVERWRITE_CONFIG, SET_CONFIG, UPDATE_CONFIG } from "./actionTypes";
-import { IConfig, IDeeplinkingConfig, IDeeplinkingDesktopConfig, IDeeplinkingMobileConfig } from "./configType";
-import { _cleanupConfig, _setDeeplinkingDefaults } from "./functions";
+import { CONFIG_WILL_LOAD, LOAD_CONFIG_ERROR, OVERWRITE_CONFIG, SET_CONFIG, UPDATE_CONFIG } from './actionTypes';
+import { IConfig, IDeeplinkingConfig, IDeeplinkingDesktopConfig, IDeeplinkingMobileConfig } from './configType';
+import { _cleanupConfig, _setDeeplinkingDefaults } from './functions';
 
 /**
  * The initial state of the feature base/config when executing in a
@@ -39,10 +39,10 @@ const INITIAL_RN_STATE: IConfig = {};
  * new configs. Needed in order to keep backwards compatibility.
  */
 const CONFERENCE_HEADER_MAPPING = {
-    hideConferenceTimer: ["conference-timer"],
-    hideConferenceSubject: ["subject"],
-    hideParticipantsStats: ["participants-count"],
-    hideRecordingLabel: ["recording"],
+    hideConferenceTimer: [ 'conference-timer' ],
+    hideConferenceSubject: [ 'subject' ],
+    hideParticipantsStats: [ 'participants-count' ],
+    hideRecordingLabel: [ 'recording' ],
 };
 
 export interface IConfigState extends IConfig {
@@ -62,72 +62,72 @@ export interface IConfigState extends IConfig {
     };
 }
 
-ReducerRegistry.register<IConfigState>("features/base/config", (state = _getInitialState(), action): IConfigState => {
+ReducerRegistry.register<IConfigState>('features/base/config', (state = _getInitialState(), action): IConfigState => {
     switch (action.type) {
-        case UPDATE_CONFIG:
-            return _updateConfig(state, action);
+    case UPDATE_CONFIG:
+        return _updateConfig(state, action);
 
-        case CONFIG_WILL_LOAD:
-            return {
-                error: undefined,
+    case CONFIG_WILL_LOAD:
+        return {
+            error: undefined,
 
-                /**
+            /**
                  * The URL of the location associated with/configured by this
                  * configuration.
                  *
                  * @type URL
                  */
-                locationURL: action.locationURL,
-            };
+            locationURL: action.locationURL,
+        };
 
-        case CONNECTION_PROPERTIES_UPDATED: {
-            const { region, shard } = action.properties;
-            const { deploymentInfo } = state;
+    case CONNECTION_PROPERTIES_UPDATED: {
+        const { region, shard } = action.properties;
+        const { deploymentInfo } = state;
 
-            if (deploymentInfo?.region === region && deploymentInfo?.shard === shard) {
-                return state;
-            }
+        if (deploymentInfo?.region === region && deploymentInfo?.shard === shard) {
+            return state;
+        }
 
-            return {
-                ...state,
-                deploymentInfo: JSON.parse(
+        return {
+            ...state,
+            deploymentInfo: JSON.parse(
                     JSON.stringify({
                         ...deploymentInfo,
                         region,
                         shard,
                     })
-                ),
-            };
-        }
+            ),
+        };
+    }
 
-        case LOAD_CONFIG_ERROR:
-            // XXX LOAD_CONFIG_ERROR is one of the settlement execution paths of
-            // the asynchronous "loadConfig procedure/process" started with
-            // CONFIG_WILL_LOAD. Due to the asynchronous nature of it, whoever
-            // is settling the process needs to provide proof that they have
-            // started it and that the iteration of the process being completed
-            // now is still of interest to the app.
-            if (state.locationURL === action.locationURL) {
-                return {
-                    /**
+    case LOAD_CONFIG_ERROR:
+        // XXX LOAD_CONFIG_ERROR is one of the settlement execution paths of
+        // the asynchronous "loadConfig procedure/process" started with
+        // CONFIG_WILL_LOAD. Due to the asynchronous nature of it, whoever
+        // is settling the process needs to provide proof that they have
+        // started it and that the iteration of the process being completed
+        // now is still of interest to the app.
+        if (state.locationURL === action.locationURL) {
+            return {
+                /**
                      * The {@link Error} which prevented the loading of the
                      * configuration of the associated {@code locationURL}.
                      *
                      * @type Error
                      */
-                    error: action.error,
-                };
-            }
-            break;
-
-        case SET_CONFIG:
-            return _setConfig(state, action);
-
-        case OVERWRITE_CONFIG:
-            return {
-                ...state,
-                ...action.config,
+                error: action.error,
             };
+        }
+        break;
+
+    case SET_CONFIG:
+        return _setConfig(state, action);
+
+    case OVERWRITE_CONFIG:
+        return {
+            ...state,
+            ...action.config,
+        };
     }
 
     return state;
@@ -143,7 +143,7 @@ ReducerRegistry.register<IConfigState>("features/base/config", (state = _getInit
  * @returns {Object}
  */
 function _getInitialState() {
-    return navigator.product === "ReactNative" ? INITIAL_RN_STATE : INITIAL_NON_RN_STATE;
+    return navigator.product === 'ReactNative' ? INITIAL_RN_STATE : INITIAL_NON_RN_STATE;
 }
 
 /**
@@ -155,7 +155,7 @@ function _getInitialState() {
  * @private
  * @returns {Object} The new state after the reduction of the specified action.
  */
-function _setConfig(state: IConfig, { config }: { config: IConfig }) {
+function _setConfig(state: IConfig, { config }: { config: IConfig; }) {
     // eslint-disable-next-line no-param-reassign
     config = _translateLegacyConfig(config);
 
@@ -208,8 +208,8 @@ function _getConferenceInfo(config: IConfig) {
 
     if (conferenceInfo) {
         return {
-            alwaysVisible: conferenceInfo.alwaysVisible ?? [...CONFERENCE_INFO.alwaysVisible],
-            autoHide: conferenceInfo.autoHide ?? [...CONFERENCE_INFO.autoHide],
+            alwaysVisible: conferenceInfo.alwaysVisible ?? [ ...CONFERENCE_INFO.alwaysVisible ],
+            autoHide: conferenceInfo.autoHide ?? [ ...CONFERENCE_INFO.autoHide ],
         };
     }
 
@@ -232,9 +232,9 @@ function _translateInterfaceConfig(oldValue: IConfig) {
     const newValue = oldValue;
 
     if (
-        !Array.isArray(oldValue.toolbarButtons) &&
-        typeof interfaceConfig === "object" &&
-        Array.isArray(interfaceConfig.TOOLBAR_BUTTONS)
+        !Array.isArray(oldValue.toolbarButtons)
+        && typeof interfaceConfig === 'object'
+        && Array.isArray(interfaceConfig.TOOLBAR_BUTTONS)
     ) {
         newValue.toolbarButtons = interfaceConfig.TOOLBAR_BUTTONS;
     }
@@ -245,35 +245,35 @@ function _translateInterfaceConfig(oldValue: IConfig) {
 
     newValue.toolbarConfig = oldValue.toolbarConfig || {};
     if (
-        typeof oldValue.toolbarConfig.alwaysVisible !== "boolean" &&
-        typeof interfaceConfig === "object" &&
-        typeof interfaceConfig.TOOLBAR_ALWAYS_VISIBLE === "boolean"
+        typeof oldValue.toolbarConfig.alwaysVisible !== 'boolean'
+        && typeof interfaceConfig === 'object'
+        && typeof interfaceConfig.TOOLBAR_ALWAYS_VISIBLE === 'boolean'
     ) {
         newValue.toolbarConfig.alwaysVisible = interfaceConfig.TOOLBAR_ALWAYS_VISIBLE;
     }
 
     if (
-        typeof oldValue.toolbarConfig.initialTimeout !== "number" &&
-        typeof interfaceConfig === "object" &&
-        typeof interfaceConfig.INITIAL_TOOLBAR_TIMEOUT === "number"
+        typeof oldValue.toolbarConfig.initialTimeout !== 'number'
+        && typeof interfaceConfig === 'object'
+        && typeof interfaceConfig.INITIAL_TOOLBAR_TIMEOUT === 'number'
     ) {
         newValue.toolbarConfig.initialTimeout = interfaceConfig.INITIAL_TOOLBAR_TIMEOUT;
     }
 
     if (
-        typeof oldValue.toolbarConfig.timeout !== "number" &&
-        typeof interfaceConfig === "object" &&
-        typeof interfaceConfig.TOOLBAR_TIMEOUT === "number"
+        typeof oldValue.toolbarConfig.timeout !== 'number'
+        && typeof interfaceConfig === 'object'
+        && typeof interfaceConfig.TOOLBAR_TIMEOUT === 'number'
     ) {
         newValue.toolbarConfig.timeout = interfaceConfig.TOOLBAR_TIMEOUT;
     }
 
     if (
-        !oldValue.connectionIndicators &&
-        typeof interfaceConfig === "object" &&
-        (interfaceConfig.hasOwnProperty("CONNECTION_INDICATOR_DISABLED") ||
-            interfaceConfig.hasOwnProperty("CONNECTION_INDICATOR_AUTO_HIDE_ENABLED") ||
-            interfaceConfig.hasOwnProperty("CONNECTION_INDICATOR_AUTO_HIDE_TIMEOUT"))
+        !oldValue.connectionIndicators
+        && typeof interfaceConfig === 'object'
+        && (interfaceConfig.hasOwnProperty('CONNECTION_INDICATOR_DISABLED')
+            || interfaceConfig.hasOwnProperty('CONNECTION_INDICATOR_AUTO_HIDE_ENABLED')
+            || interfaceConfig.hasOwnProperty('CONNECTION_INDICATOR_AUTO_HIDE_TIMEOUT'))
     ) {
         newValue.connectionIndicators = {
             disabled: interfaceConfig.CONNECTION_INDICATOR_DISABLED,
@@ -283,34 +283,34 @@ function _translateInterfaceConfig(oldValue: IConfig) {
     }
 
     if (
-        oldValue.disableModeratorIndicator === undefined &&
-        typeof interfaceConfig === "object" &&
-        interfaceConfig.hasOwnProperty("DISABLE_FOCUS_INDICATOR")
+        oldValue.disableModeratorIndicator === undefined
+        && typeof interfaceConfig === 'object'
+        && interfaceConfig.hasOwnProperty('DISABLE_FOCUS_INDICATOR')
     ) {
         newValue.disableModeratorIndicator = interfaceConfig.DISABLE_FOCUS_INDICATOR;
     }
 
     if (
-        oldValue.defaultLocalDisplayName === undefined &&
-        typeof interfaceConfig === "object" &&
-        interfaceConfig.hasOwnProperty("DEFAULT_LOCAL_DISPLAY_NAME")
+        oldValue.defaultLocalDisplayName === undefined
+        && typeof interfaceConfig === 'object'
+        && interfaceConfig.hasOwnProperty('DEFAULT_LOCAL_DISPLAY_NAME')
     ) {
         newValue.defaultLocalDisplayName = interfaceConfig.DEFAULT_LOCAL_DISPLAY_NAME;
     }
 
     if (
-        oldValue.defaultRemoteDisplayName === undefined &&
-        typeof interfaceConfig === "object" &&
-        interfaceConfig.hasOwnProperty("DEFAULT_REMOTE_DISPLAY_NAME")
+        oldValue.defaultRemoteDisplayName === undefined
+        && typeof interfaceConfig === 'object'
+        && interfaceConfig.hasOwnProperty('DEFAULT_REMOTE_DISPLAY_NAME')
     ) {
         newValue.defaultRemoteDisplayName = interfaceConfig.DEFAULT_REMOTE_DISPLAY_NAME;
     }
 
     if (oldValue.defaultLogoUrl === undefined) {
-        if (typeof interfaceConfig === "object" && interfaceConfig.hasOwnProperty("DEFAULT_LOGO_URL")) {
+        if (typeof interfaceConfig === 'object' && interfaceConfig.hasOwnProperty('DEFAULT_LOGO_URL')) {
             newValue.defaultLogoUrl = interfaceConfig.DEFAULT_LOGO_URL;
         } else {
-            newValue.defaultLogoUrl = "images/hankamrata.svg";
+            newValue.defaultLogoUrl = 'images/hankamrata.svg';
         }
     }
 
@@ -318,7 +318,7 @@ function _translateInterfaceConfig(oldValue: IConfig) {
     // Otherwise, compose the config.
     if (oldValue.deeplinking && newValue.deeplinking) {
         // make TS happy
-        newValue.deeplinking.disabled = oldValue.deeplinking.hasOwnProperty("disabled")
+        newValue.deeplinking.disabled = oldValue.deeplinking.hasOwnProperty('disabled')
             ? oldValue.deeplinking.disabled
             : Boolean(oldValue.disableDeepLinking);
     } else {
@@ -331,7 +331,7 @@ function _translateInterfaceConfig(oldValue: IConfig) {
             ios: {} as IDeeplinkingMobileConfig,
         };
 
-        if (typeof interfaceConfig === "object") {
+        if (typeof interfaceConfig === 'object') {
             if (deeplinking.desktop) {
                 deeplinking.desktop.appName = interfaceConfig.NATIVE_APP_NAME;
             }
@@ -376,19 +376,19 @@ function _translateLegacyConfig(oldValue: IConfig) {
     // Translate deprecated config values to new config values.
 
     const filteredConferenceInfo = Object.keys(CONFERENCE_HEADER_MAPPING).filter(
-        (key) => oldValue[key as keyof IConfig]
+        key => oldValue[key as keyof IConfig]
     );
 
     if (filteredConferenceInfo.length) {
         newValue.conferenceInfo = _getConferenceInfo(oldValue);
 
-        filteredConferenceInfo.forEach((key) => {
+        filteredConferenceInfo.forEach(key => {
             newValue.conferenceInfo = oldValue.conferenceInfo ?? {};
 
             // hideRecordingLabel does not mean not render it at all, but autoHide it
-            if (key === "hideRecordingLabel") {
+            if (key === 'hideRecordingLabel') {
                 newValue.conferenceInfo.alwaysVisible = (newValue.conferenceInfo?.alwaysVisible ?? []).filter(
-                    (c) => !CONFERENCE_HEADER_MAPPING[key].includes(c)
+                    c => !CONFERENCE_HEADER_MAPPING[key].includes(c)
                 );
                 newValue.conferenceInfo.autoHide = union(
                     newValue.conferenceInfo.autoHide,
@@ -396,37 +396,37 @@ function _translateLegacyConfig(oldValue: IConfig) {
                 );
             } else {
                 newValue.conferenceInfo.alwaysVisible = (newValue.conferenceInfo.alwaysVisible ?? []).filter(
-                    (c) => !CONFERENCE_HEADER_MAPPING[key as keyof typeof CONFERENCE_HEADER_MAPPING].includes(c)
+                    c => !CONFERENCE_HEADER_MAPPING[key as keyof typeof CONFERENCE_HEADER_MAPPING].includes(c)
                 );
                 newValue.conferenceInfo.autoHide = (newValue.conferenceInfo.autoHide ?? []).filter(
-                    (c) => !CONFERENCE_HEADER_MAPPING[key as keyof typeof CONFERENCE_HEADER_MAPPING].includes(c)
+                    c => !CONFERENCE_HEADER_MAPPING[key as keyof typeof CONFERENCE_HEADER_MAPPING].includes(c)
                 );
             }
         });
     }
 
     newValue.welcomePage = oldValue.welcomePage || {};
-    if (oldValue.hasOwnProperty("enableWelcomePage") && !newValue.welcomePage.hasOwnProperty("disabled")) {
+    if (oldValue.hasOwnProperty('enableWelcomePage') && !newValue.welcomePage.hasOwnProperty('disabled')) {
         newValue.welcomePage.disabled = !oldValue.enableWelcomePage;
     }
 
     newValue.disabledSounds = newValue.disabledSounds || [];
 
     if (oldValue.disableJoinLeaveSounds) {
-        newValue.disabledSounds.unshift("PARTICIPANT_LEFT_SOUND", "PARTICIPANT_JOINED_SOUND");
+        newValue.disabledSounds.unshift('PARTICIPANT_LEFT_SOUND', 'PARTICIPANT_JOINED_SOUND');
     }
 
     if (oldValue.disableRecordAudioNotification) {
         newValue.disabledSounds.unshift(
-            "RECORDING_ON_SOUND",
-            "RECORDING_OFF_SOUND",
-            "LIVE_STREAMING_ON_SOUND",
-            "LIVE_STREAMING_OFF_SOUND"
+            'RECORDING_ON_SOUND',
+            'RECORDING_OFF_SOUND',
+            'LIVE_STREAMING_ON_SOUND',
+            'LIVE_STREAMING_OFF_SOUND'
         );
     }
 
     if (oldValue.disableIncomingMessageSound) {
-        newValue.disabledSounds.unshift("INCOMING_MSG_SOUND");
+        newValue.disabledSounds.unshift('INCOMING_MSG_SOUND');
     }
 
     newValue.raisedHands = newValue.raisedHands || {};
@@ -448,7 +448,7 @@ function _translateLegacyConfig(oldValue: IConfig) {
         newValue.e2ee.labels = oldValue.e2eeLabels;
     }
 
-    newValue.defaultLocalDisplayName = newValue.defaultLocalDisplayName || "me";
+    newValue.defaultLocalDisplayName = newValue.defaultLocalDisplayName || 'me';
 
     if (oldValue.hideAddRoomButton) {
         newValue.breakoutRooms = {
@@ -458,7 +458,7 @@ function _translateLegacyConfig(oldValue: IConfig) {
         };
     }
 
-    newValue.defaultRemoteDisplayName = newValue.defaultRemoteDisplayName || "Fellow Jitster";
+    newValue.defaultRemoteDisplayName = newValue.defaultRemoteDisplayName || 'Fellow Jitster';
 
     newValue.transcription = newValue.transcription || {};
     if (oldValue.transcribingEnabled !== undefined) {
@@ -494,8 +494,8 @@ function _translateLegacyConfig(oldValue: IConfig) {
         };
     }
     if (
-        oldValue.fileRecordingsServiceSharingEnabled !== undefined &&
-        newValue.recordingService.sharingEnabled === undefined
+        oldValue.fileRecordingsServiceSharingEnabled !== undefined
+        && newValue.recordingService.sharingEnabled === undefined
     ) {
         newValue.recordingService = {
             ...newValue.recordingService,
@@ -515,9 +515,9 @@ function _translateLegacyConfig(oldValue: IConfig) {
 
     // Migrate interfaceConfig.LIVE_STREAMING_HELP_LINK
     if (
-        oldValue.liveStreaming === undefined &&
-        typeof interfaceConfig === "object" &&
-        interfaceConfig.hasOwnProperty("LIVE_STREAMING_HELP_LINK")
+        oldValue.liveStreaming === undefined
+        && typeof interfaceConfig === 'object'
+        && interfaceConfig.hasOwnProperty('LIVE_STREAMING_HELP_LINK')
     ) {
         newValue.liveStreaming = {
             ...newValue.liveStreaming,
@@ -563,10 +563,10 @@ function _translateLegacyConfig(oldValue: IConfig) {
     }
 
     // Profile button is not available on mobile
-    if (navigator.product !== "ReactNative") {
+    if (navigator.product !== 'ReactNative') {
         if (oldValue.disableProfile) {
             newValue.toolbarButtons = (newValue.toolbarButtons || TOOLBAR_BUTTONS).filter(
-                (button: ToolbarButton) => button !== "profile"
+                (button: ToolbarButton) => button !== 'profile'
             );
         }
     }
@@ -584,7 +584,7 @@ function _translateLegacyConfig(oldValue: IConfig) {
  * @private
  * @returns {Object} The new state after the reduction of the specified action.
  */
-function _updateConfig(state: IConfig, { config }: { config: IConfig }) {
+function _updateConfig(state: IConfig, { config }: { config: IConfig; }) {
     const newState = merge({}, state, config);
 
     _cleanupConfig(newState);

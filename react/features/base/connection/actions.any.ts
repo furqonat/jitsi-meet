@@ -1,13 +1,13 @@
-import { cloneDeep } from "lodash-es";
+import { cloneDeep } from 'lodash-es';
 
-import { IReduxState, IStore } from "../../app/types";
-import { conferenceLeft, conferenceWillLeave, redirect } from "../conference/actions";
-import { getCurrentConference } from "../conference/functions";
-import { IConfigState } from "../config/reducer";
-import JitsiMeetJS, { JitsiConnectionEvents } from "../lib-jitsi-meet";
-import { isEmbedded } from "../util/embedUtils";
-import { parseURLParams } from "../util/parseURLParams";
-import { appendURLParam, getBackendSafeRoomName } from "../util/uri";
+import { IReduxState, IStore } from '../../app/types';
+import { conferenceLeft, conferenceWillLeave, redirect } from '../conference/actions';
+import { getCurrentConference } from '../conference/functions';
+import { IConfigState } from '../config/reducer';
+import JitsiMeetJS, { JitsiConnectionEvents } from '../lib-jitsi-meet';
+import { isEmbedded } from '../util/embedUtils';
+import { parseURLParams } from '../util/parseURLParams';
+import { appendURLParam, getBackendSafeRoomName } from '../util/uri';
 
 import {
     CONNECTION_DISCONNECTED,
@@ -17,10 +17,10 @@ import {
     CONNECTION_WILL_CONNECT,
     SET_LOCATION_URL,
     SET_PREFER_VISITOR,
-} from "./actionTypes";
-import { JITSI_CONNECTION_URL_KEY } from "./constants";
-import logger from "./logger";
-import { ConnectionFailedError, IIceServers } from "./types";
+} from './actionTypes';
+import { JITSI_CONNECTION_URL_KEY } from './constants';
+import logger from './logger';
+import { ConnectionFailedError, IIceServers } from './types';
 
 /**
  * The options that will be passed to the JitsiConnection instance.
@@ -108,11 +108,11 @@ export function connectionFailed(connection: Object, error: ConnectionFailedErro
 export function constructOptions(state: IReduxState) {
     // Deep clone the options to make sure we don't modify the object in the
     // redux store.
-    const options: IOptions = cloneDeep(state["features/base/config"]);
+    const options: IOptions = cloneDeep(state['features/base/config']);
 
-    const { locationURL, preferVisitor } = state["features/base/connection"];
-    const params = parseURLParams(locationURL || "");
-    const iceServersOverride = params["iceServers.replace"];
+    const { locationURL, preferVisitor } = state['features/base/connection'];
+    const params = parseURLParams(locationURL || '');
+    const iceServersOverride = params['iceServers.replace'];
 
     // Allow iceServersOverride only when jitsi-meet is in an iframe.
     if (isEmbedded() && iceServersOverride) {
@@ -132,18 +132,18 @@ export function constructOptions(state: IReduxState) {
     logger.log(`Using service URL ${serviceUrl}`);
 
     // Append room to the URL's search.
-    const { room } = state["features/base/conference"];
+    const { room } = state['features/base/conference'];
 
     if (serviceUrl && room) {
         const roomName = getBackendSafeRoomName(room);
 
-        options.serviceUrl = appendURLParam(serviceUrl, "room", roomName ?? "");
+        options.serviceUrl = appendURLParam(serviceUrl, 'room', roomName ?? '');
 
         if (options.websocketKeepAliveUrl) {
-            options.websocketKeepAliveUrl = appendURLParam(options.websocketKeepAliveUrl, "room", roomName ?? "");
+            options.websocketKeepAliveUrl = appendURLParam(options.websocketKeepAliveUrl, 'room', roomName ?? '');
         }
         if (options.conferenceRequestUrl) {
-            options.conferenceRequestUrl = appendURLParam(options.conferenceRequestUrl, "room", roomName ?? "");
+            options.conferenceRequestUrl = appendURLParam(options.conferenceRequestUrl, 'room', roomName ?? '');
         }
     }
 
@@ -152,7 +152,7 @@ export function constructOptions(state: IReduxState) {
     }
 
     // Enable ssrc-rewriting by default.
-    if (typeof flags?.ssrcRewritingEnabled === "undefined") {
+    if (typeof flags?.ssrcRewritingEnabled === 'undefined') {
         const { ...otherFlags } = flags ?? {};
 
         options.flags = {
@@ -205,11 +205,11 @@ export function setPreferVisitor(preferVisitor: boolean) {
  * @returns {Function}
  */
 export function _connectInternal(id?: string, password?: string) {
-    return (dispatch: IStore["dispatch"], getState: IStore["getState"]) => {
+    return (dispatch: IStore['dispatch'], getState: IStore['getState']) => {
         const state = getState();
         const options = constructOptions(state);
-        const { locationURL } = state["features/base/connection"];
-        const { jwt } = state["features/base/jwt"];
+        const { locationURL } = state['features/base/connection'];
+        const { jwt } = state['features/base/jwt'];
 
         const connection = new JitsiMeetJS.JitsiConnection(options.appId, jwt, options);
 
@@ -268,7 +268,7 @@ export function _connectInternal(id?: string, password?: string) {
             function _onConnectionFailed(err: string, message: string, credentials: any, details: Object) {
                 // eslint-disable-line max-params
                 unsubscribe();
-                console.error("Connection error", err, message, credentials, details);
+                console.error('Connection error', err, message, credentials, details);
                 dispatch(
                     connectionFailed(connection, {
                         credentials,
@@ -320,7 +320,7 @@ export function _connectInternal(id?: string, password?: string) {
             }
 
             // in case of configured http url for conference request we need the room name
-            const name = getBackendSafeRoomName(state["features/base/conference"].room);
+            const name = getBackendSafeRoomName(state['features/base/conference'].room);
 
             connection.connect({
                 id,
@@ -374,7 +374,7 @@ function _propertiesUpdate(properties: object) {
  * @returns {Function}
  */
 export function disconnect(isRedirect?: boolean, shouldLeave = true) {
-    return (dispatch: IStore["dispatch"], getState: IStore["getState"]): Promise<void> => {
+    return (dispatch: IStore['dispatch'], getState: IStore['getState']): Promise<void> => {
         const state = getState();
 
         // The conference we have already joined or are joining.
@@ -398,7 +398,7 @@ export function disconnect(isRedirect?: boolean, shouldLeave = true) {
                 promise = Promise.resolve();
             } else {
                 promise = conference_.leave().catch((error: Error) => {
-                    logger.warn("JitsiConference.leave() rejected with:", error);
+                    logger.warn('JitsiConference.leave() rejected with:', error);
 
                     // The library lib-jitsi-meet failed to make the
                     // JitsiConference leave. Which may be because
@@ -413,7 +413,7 @@ export function disconnect(isRedirect?: boolean, shouldLeave = true) {
         }
 
         // Disconnect the connection.
-        const { connecting, connection } = state["features/base/connection"];
+        const { connecting, connection } = state['features/base/connection'];
 
         // The connection we have already connected or are connecting.
         const connection_ = connection || connecting;
@@ -421,7 +421,7 @@ export function disconnect(isRedirect?: boolean, shouldLeave = true) {
         if (connection_) {
             promise = promise.then(() => connection_.disconnect());
         } else {
-            logger.info("No connection found while disconnecting.");
+            logger.info('No connection found while disconnecting.');
         }
 
         return promise;
