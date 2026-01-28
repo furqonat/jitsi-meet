@@ -110,7 +110,7 @@ function _conferenceFailed({ dispatch }: IStore, next: Function, action: AnyActi
         }
 
         // Cegah multiple opens
-        if (error.recoverable && !isPasswordPromptOpen) {
+        if (error.recoverable) {
             dispatch(_openPasswordRequiredPrompt(conference));
         }
     } else {
