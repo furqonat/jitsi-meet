@@ -9,7 +9,7 @@
  */
 
 var interfaceConfig = {
-    APP_NAME: 'Republikorp Meet',
+    APP_NAME: 'Republikorp Virtual Meeting',
     AUDIO_LEVEL_PRIMARY_COLOR: 'rgba(255,255,255,0.4)',
     AUDIO_LEVEL_SECONDARY_COLOR: 'rgba(255,255,255,0.2)',
 
