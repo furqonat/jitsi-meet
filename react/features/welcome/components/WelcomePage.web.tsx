@@ -253,7 +253,7 @@ class WelcomePage extends AbstractWelcomePage<IProps> {
                                     onClick = { this._onFormSubmit }
                                     tabIndex = { 0 }
                                     type = 'button'>
-                                    Masuk Ruangan
+                                    Enter
                                 </button>
                             </div>
                         </div>

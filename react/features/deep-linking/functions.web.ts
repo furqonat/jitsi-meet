@@ -70,13 +70,8 @@ export function getDeepLinkingPage(state: IReduxState) {
     }
 
     if (isMobileBrowser()) { // mobile
-        const mobileAppPromo
-            = typeof interfaceConfig === 'object'
-                && interfaceConfig.MOBILE_APP_PROMO;
-
         return Promise.resolve(
-            typeof mobileAppPromo === 'undefined' || Boolean(mobileAppPromo)
-                ? DeepLinkingMobilePage : NoMobileApp);
+            NoMobileApp);
     }
 
     return _openDesktopApp(state).then(

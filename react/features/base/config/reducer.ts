@@ -310,7 +310,7 @@ function _translateInterfaceConfig(oldValue: IConfig) {
         if (typeof interfaceConfig === 'object' && interfaceConfig.hasOwnProperty('DEFAULT_LOGO_URL')) {
             newValue.defaultLogoUrl = interfaceConfig.DEFAULT_LOGO_URL;
         } else {
-            newValue.defaultLogoUrl = 'images/hankamrata.svg';
+            newValue.defaultLogoUrl = 'images/logo.png';
         }
     }
 

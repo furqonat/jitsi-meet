@@ -149,7 +149,7 @@ class Watermarks extends Component<IProps, State> {
 
         if (_showJitsiWatermark) {
             const style = {
-                backgroundImage: 'url("images/hankamrata.svg")',
+                backgroundImage: 'url("images/logo.png")',
                 position: _logoLink ? 'static' : 'absolute',
             } as const;
 

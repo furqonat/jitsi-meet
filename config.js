@@ -1858,7 +1858,7 @@ var config = {
     // },
 
     // Application logo url
-    defaultLogoUrl: 'images/hankamrata.svg',
+    defaultLogoUrl: 'images/logo.png',
 
     // Settings for the Excalidraw whiteboard integration.
     // whiteboard: {
