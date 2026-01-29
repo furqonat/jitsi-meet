@@ -69,11 +69,6 @@ export function getDeepLinkingPage(state: IReduxState) {
         return Promise.resolve();
     }
 
-    if (isMobileBrowser()) { // mobile
-        return Promise.resolve(
-            NoMobileApp);
-    }
-
     return _openDesktopApp(state).then(
         // eslint-disable-next-line no-confusing-arrow
         result => result ? DeepLinkingDesktopPage : undefined);
