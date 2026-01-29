@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import Button from '../../../../base/ui/components/web/Button';
 import Input from '../../../../base/ui/components/web/Input';
 import { LOCKED_LOCALLY } from '../../../../room-lock/constants';
 
@@ -57,6 +58,7 @@ export default function PasswordForm({
 }: IProps) {
     const { t } = useTranslation();
     const [ enteredPassword, setEnteredPassword ] = useState('');
+
     const onKeyPress = useCallback(event => {
         if (event.key === 'Enter') {
             event.preventDefault();
@@ -66,6 +68,29 @@ export default function PasswordForm({
         }
     }, [ onSubmit, enteredPassword ]);
 
+    const generatePassword = useCallback(() => {
+        let generatedPassword = '';
+
+        if (passwordNumberOfDigits) {
+            // Generate numeric password with specified number of digits
+            for (let i = 0; i < passwordNumberOfDigits; i++) {
+                generatedPassword += Math.floor(Math.random() * 10);
+            }
+        } else {
+            // Generate alphanumeric password with 8 characters
+            const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
+            const length = 8;
+
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * charset.length);
+
+                generatedPassword += charset[randomIndex];
+            }
+        }
+
+        setEnteredPassword(generatedPassword);
+    }, [ passwordNumberOfDigits ]);
+
     if (!editEnabled && enteredPassword && enteredPassword !== '') {
         setEnteredPassword('');
     }
@@ -73,6 +98,8 @@ export default function PasswordForm({
     const placeHolderText
         = passwordNumberOfDigits ? t('passwordDigitsOnly', { number: passwordNumberOfDigits }) : t('dialog.password');
 
+    // Check if we should show the generate button
+    const showGenerateButton = editEnabled && !locked;
 
     return (
         <div className = 'info-password'>
@@ -97,17 +124,28 @@ export default function PasswordForm({
             {
                 editEnabled && <div
                     className = 'info-password-form'>
-                    <Input
-                        accessibilityLabel = { t('info.addPassword') }
-                        autoFocus = { true }
-                        id = 'info-password-input'
-                        maxLength = { passwordNumberOfDigits }
-                        mode = { passwordNumberOfDigits ? 'numeric' : undefined }
-                        onChange = { setEnteredPassword }
-                        onKeyPress = { onKeyPress }
-                        placeholder = { placeHolderText }
-                        type = 'password'
-                        value = { enteredPassword } />
+                    <div className = 'password-input-container'>
+                        <Input
+                            accessibilityLabel = { t('info.addPassword') }
+                            autoFocus = { true }
+                            id = 'info-password-input'
+                            maxLength = { passwordNumberOfDigits }
+                            mode = { passwordNumberOfDigits ? 'numeric' : undefined }
+                            onChange = { setEnteredPassword }
+                            onKeyPress = { onKeyPress }
+                            placeholder = { placeHolderText }
+                            type = 'password'
+                            value = { enteredPassword } />
+
+                        {showGenerateButton && (
+                            <Button
+                                accessibilityLabel = { 'Generate Password' }
+                                label = { 'Generate' }
+                                onClick = { generatePassword }
+                                size = 'small'
+                                type = 'tertiary' />
+                        )}
+                    </div>
                 </div>
             }
         </div>
