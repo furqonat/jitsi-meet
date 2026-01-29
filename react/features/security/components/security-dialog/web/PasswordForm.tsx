@@ -98,8 +98,6 @@ export default function PasswordForm({
     const placeHolderText
         = passwordNumberOfDigits ? t('passwordDigitsOnly', { number: passwordNumberOfDigits }) : t('dialog.password');
 
-    // Check if we should show the generate button
-    const showGenerateButton = editEnabled && !locked;
 
     return (
         <div className = 'info-password'>
@@ -137,14 +135,12 @@ export default function PasswordForm({
                             type = 'password'
                             value = { enteredPassword } />
 
-                        {showGenerateButton && (
-                            <Button
-                                accessibilityLabel = { 'Generate Password' }
-                                label = { 'Generate' }
-                                onClick = { generatePassword }
-                                size = 'small'
-                                type = 'tertiary' />
-                        )}
+                        <Button
+                            accessibilityLabel = { 'Generate Password' }
+                            label = { 'Generate' }
+                            onClick = { generatePassword }
+                            size = 'small'
+                            type = 'tertiary' />
                     </div>
                 </div>
             }
