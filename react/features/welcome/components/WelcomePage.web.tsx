@@ -50,7 +50,7 @@ class WelcomePage extends AbstractWelcomePage<IProps> {
 
         this.state = {
             ...this.state,
-            room: 'security1', // Set default value to Security1
+            room: 'gading', // Set default value to Security1
             generateRoomNames: undefined, // Disable auto-generate since we're using select
         };
 
@@ -182,7 +182,17 @@ class WelcomePage extends AbstractWelcomePage<IProps> {
         const footerClassName = DISPLAY_WELCOME_FOOTER ? 'with-footer' : 'without-footer';
 
         // Generate Security options from 1 to 10
-        const securityOptions = Array.from({ length: 10 }, (_, i) => `Security${i + 1}`);
+        const securityOptions = [
+            'Majapahit',
+            'Sriwijaya',
+            'Pajajaran',
+            'Kutai',
+            'Mataram',
+            'Singasari',
+            'Tarumanagara',
+            'Kediri',
+            'Tondano',
+            'Gowa' ];
 
         return (
             <div
