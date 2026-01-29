@@ -185,7 +185,7 @@ class WelcomePage extends AbstractWelcomePage<IProps> {
         const securityOptions = [
             'Majapahit',
             'Sriwijaya',
-            'Pajajaran',
+            'Padjajaran',
             'Kutai',
             'Mataram',
             'Singasari',
