@@ -208,7 +208,7 @@ class WelcomePage extends AbstractWelcomePage<IProps> {
                                     ref = { this._setAdditionalToolbarContentRef } />
                             ) : null}
                         </div>
-                        <h1 className = 'header-text-title'>Hankamrata Meet</h1>
+                        <h1 className = 'header-text-title'>Republikorp Meet</h1>
                         <span className = 'header-text-subtitle'>Pilih ruangan untuk bergabung</span>
                         <div id = 'enter_room'>
                             <div className = 'join-meeting-container'>
